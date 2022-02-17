@@ -72,14 +72,18 @@ export default (bus, store, moduleName, keyName) => {
     bus.$emit('reset')
   }
 
+  // 记录路由
   const record = (toRoute, fromRoute, replaceFlag) => {
+    // 获取路由名和参数中的编码值，拼接成VNK路由标识
     const name = getKey(toRoute, keyName)
     if (replaceFlag) {
       replace(name, toRoute, fromRoute)
     } else {
       const toIndex = Routes.lastIndexOf(name)
+      // 如果路由记录中没有访问过则表示forward
       if (toIndex === -1) {
         forward(name, toRoute, fromRoute)
+        // 如果记录的是
       } else if (toIndex === Routes.length - 1) {
         refresh(toRoute, fromRoute)
       } else {
