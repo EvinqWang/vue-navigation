@@ -12,10 +12,14 @@ export default (keyName) => {
     computed: {},
     watch: {
       routes(val) {
+        debugger
+        // cache中缓存的虚拟DOM节点,不在路由记录routes中，则删除缓存
         for (const key in this.cache) {
           if (!matches(val, key)) {
             const vnode = this.cache[key]
+            // 调用Vnode实例的destroy方法将DOM组件实例摧毁
             vnode && vnode.componentInstance.$destroy()
+            // 删除缓存
             delete this.cache[key]
           }
         }
@@ -24,6 +28,7 @@ export default (keyName) => {
     created() {
       this.cache = {}
     },
+    // navigation组件摧毁时，将所有缓存的VNode节点删除
     destroyed() {
       for (const key in this.cache) {
         const vnode = this.cache[key]
@@ -32,7 +37,9 @@ export default (keyName) => {
     },
     render() {
       const vnode = this.$slots.default ? this.$slots.default[0] : null
+      debugger
       if (vnode) {
+        debugger
         vnode.key = vnode.key || (vnode.isComment
           ? 'comment'
           : vnode.tag)
