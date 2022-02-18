@@ -44,13 +44,17 @@ export default (keyName) => {
           ? 'comment'
           : vnode.tag)
         // prevent vue-router reuse component
+        // 获取路由标识
         const key = getKey(this.$route, keyName)
+        // 如果该页面没有被访问过（重新命名）就对VNode重新设置key
         if (vnode.key.indexOf(key) === -1) {
           vnode.key = `__navigation-${key}-${vnode.key}`
         }
         if (this.cache[key]) {
+          // 如果当前VNode的与缓存的VNode是同一个
           if (vnode.key === this.cache[key].key) {
             // restore vnode from cache
+            // 有VNode缓存就将缓存中的VNode挂载到当前vnode实例下
             vnode.componentInstance = this.cache[key].componentInstance
           } else {
             // replace vnode to cache
